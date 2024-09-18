@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import * as _ from "underscore";
 import Tool from "./Tool";
 import { modelInputProps } from "./helpers/Interfaces";
@@ -21,6 +21,9 @@ const Stage = () => {
   }
 
   const [imageWithMask, setImageWithMask] = imageWithMaskState;
+  const [imageList, setImageList] = useState<HTMLImageElement[]>([]);
+  const [hoverImage, setHoverImage] = useState<HTMLImageElement | null>(null);
+  const [maskedArea, setMaskedArea] = useState<string | null>(null);
 
   const getClick = (x: number, y: number): modelInputProps => {
     const clickType = 1;
@@ -42,30 +45,35 @@ const Stage = () => {
     if (click) setClicks([click]);
   }, 15);
 
+  const handleHover = (image: HTMLImageElement | null) => {
+    setHoverImage(image);
+  };
+
   const flexCenterClasses = "flex items-center justify-center";
+  const handleMaskedArea = (imageData: string | null) => {
+    setMaskedArea(imageData);
+  };
+
   return (
     <div className={`${flexCenterClasses} w-full h-full`}>
-      <div className="absolute left-[16px] top-[5%] w-[200px] h-[90%] border overflow-auto z-10 p-[8px]">
-        <ul>
-          {/* example */}
-          {!imageWithMask && (
-            <li className="p-[8px]">
-              <img src="../assets/data/bear.png" alt="" />
-            </li>
-          )}
-          {/* 如果 imageWithMask 存在，则加载图片 */}
-          {imageWithMask && (
-            <li className="p-[8px]">
-              <img src={imageWithMask.src} alt="" />
-            </li>
-          )}
-        </ul>
+      <div className="absolute left-[16px] top-[5%] w-[150px] h-[150px] border overflow-hidden z-10">
+        {maskedArea ? (
+          <img 
+            src={maskedArea} 
+            alt="Masked area" 
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-400">
+            移动鼠标查看遮罩区域
+          </div>
+        )}
       </div>
       <button className="border pl-[16px] pr-[16px] pt-[4px] pb-[4px] absolute top-[8px] left-[78px] z-20 bg-[#38f] text-[white] rounded-[4px]">
         组合
       </button>
       <div className={`${flexCenterClasses} relative w-[90%] h-[90%]`}>
-        <Tool handleMouseMove={handleMouseMove} />
+        <Tool handleMouseMove={handleMouseMove} handleMaskedArea={handleMaskedArea} />
       </div>
     </div>
   );

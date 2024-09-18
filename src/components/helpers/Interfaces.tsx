@@ -20,4 +20,5 @@ export interface modeDataProps {
 
 export interface ToolProps {
   handleMouseMove: (e: any) => void;
+  handleMaskedArea: (imageData: string | null) => void;
 }

@@ -131,9 +131,10 @@ const App = () => {
         const output = results[model.outputNames[0]];
 
         const mask = onnxMaskToImage(output.data, output.dims[2], output.dims[3]);
-        setMaskImg(mask);
+        const resizedMask = resizeMask(mask, loadedImage.width, loadedImage.height);
+        setMaskImg(resizedMask);
 
-        // 新增：组合原始图像和mask
+        // 组合原始图像和mask
         if (loadedImage) {
           const canvas = document.createElement('canvas');
           canvas.width = loadedImage.width;
@@ -157,6 +158,20 @@ const App = () => {
       console.log(e);
     }
   };
+
+  // 添加这个辅助函数
+  function resizeMask(mask: HTMLImageElement, width: number, height: number): HTMLImageElement {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(mask, 0, 0, width, height);
+    }
+    const resizedMask = new Image();
+    resizedMask.src = canvas.toDataURL();
+    return resizedMask;
+  }
 
   return <Stage />;
 };
