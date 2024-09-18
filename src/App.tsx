@@ -159,7 +159,7 @@ const App = () => {
     }
   };
 
-  // 添加这个辅助函数
+  // 添加这���辅助函数
   function resizeMask(mask: HTMLImageElement, width: number, height: number): HTMLImageElement {
     const canvas = document.createElement('canvas');
     canvas.width = width;

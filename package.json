@@ -4,7 +4,8 @@
   "license": "",
   "scripts": {
     "start": "yarn run start-dev",
-    "start-dev": "webpack serve --config=configs/webpack/dev.js"
+    "start-dev": "webpack serve --config=configs/webpack/dev.js",
+    "build": "webpack --config=configs/webpack/prod.js"
   },
   "devDependencies": {
     "@babel/core": "^7.18.13",
